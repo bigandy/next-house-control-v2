@@ -39,10 +39,10 @@ export const playRoom = async (ipAddress: string) => {
   return state;
 };
 
-export const playMusicInRoom = async (ipAddress: string, url: string) => {
+export const playMusicInRoom = async (ipAddress: string, uri: string) => {
   const device = new Sonos(ipAddress);
 
-  await device.play(url);
+  await device.play(uri);
   const state = await device.getCurrentState();
   return state;
 };
@@ -96,8 +96,7 @@ export const toggleMute = async (roomToPlay: Room) => {
   return state;
 };
 
-export const getFavorites = async (roomToPlay: Room) => {
-  const ipAddress = getRoomIpAddress(roomToPlay);
+export const getFavorites = async (ipAddress: string) => {
   const device = new Sonos(ipAddress);
 
   const sonosFavorites = await device
@@ -176,11 +175,15 @@ export const getFavorites = async (roomToPlay: Room) => {
     formattedFavorites[item.title] = returnObj;
   });
 
-  return { formattedFavorites, sonosFavorites };
+  return {
+    formattedFavorites: Object.values(formattedFavorites).filter((fav: any) => {
+      return !!fav.type && !!fav.url;
+    }),
+    sonosFavorites,
+  };
 };
 
-export const playFavorite = async (favorite, roomToPlay = "") => {
-  const ipAddress = getRoomIpAddress(roomToPlay);
+export const playFavorite = async (ipAddress, favorite) => {
   const device = new Sonos(ipAddress);
 
   device.setSpotifyRegion(Regions.EU);

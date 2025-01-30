@@ -7,14 +7,23 @@ export default function PlayMusicButton({ room }: { room: Room }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [currentTrack, setCurrentTrack] = useState<any>(null);
   useEffect(() => {
     const fetchStatus = async () => {
       setIsLoading(true);
       const response = await fetch("/api/music/sonos/getStatus");
-      const data = await response.json();
-      setIsPlaying(data.data.state.state !== "paused");
+      const responseJson = await response.json();
+      const {
+        data: {
+          state: { state: playingState, currentTrack },
+        },
+      } = responseJson;
+      setIsPlaying(playingState !== "paused");
       setIsLoading(false);
+
+      setCurrentTrack(currentTrack);
+
+      console.log({ responseJson });
     };
 
     fetchStatus();
@@ -58,6 +67,14 @@ export default function PlayMusicButton({ room }: { room: Room }) {
       </button>
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
+
+      {currentTrack && (
+        <div>
+          <p>Title: {currentTrack.title}</p>
+          <p>Artist: {currentTrack.artist}</p>
+          <p>Uri: {currentTrack.uri}</p>
+        </div>
+      )}
     </Fragment>
   );
 }

@@ -1,3 +1,10 @@
+# Music Controller
+
+## TODO
+
+- [ ] Debounce input range change so not doing too many requests
+- [ ] Consistent use of POST and GET
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

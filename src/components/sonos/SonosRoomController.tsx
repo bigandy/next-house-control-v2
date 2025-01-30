@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 import SonosPauseAllButton from "@/components/sonos/PauseAllButton";
 import SonosPlayMusicButton from "@/components/sonos/PlayMusicButton";
 import SonosRoomSelector from "@/components/sonos/RoomSelector";
 import SonosVolumeController from "@/components/sonos/VolumeController";
-import { useState } from "react";
+import SonosFavorites from "@/components/sonos/Favorites";
+import SonosPlayUriButton from "@/components/sonos/PlayUriButton";
 import { Room } from "@/app/api/music/sonos/utils";
 
 const rooms: { name: string; id: Room }[] = [
@@ -30,6 +33,10 @@ const SonosRoomController = () => {
       <SonosPlayMusicButton room={selectedRoom} />
       <SonosPauseAllButton />
       <SonosVolumeController room={selectedRoom} />
+
+      <SonosFavorites room={selectedRoom} />
+
+      <SonosPlayUriButton room={selectedRoom} />
     </div>
   );
 };
