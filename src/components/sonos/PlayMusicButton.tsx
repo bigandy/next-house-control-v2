@@ -18,7 +18,7 @@ export default function PlayMusicButton({ room }: { room: Room }) {
     };
 
     fetchStatus();
-  }, []);
+  }, [room]);
 
   const handlePlayMusic = async () => {
     try {

@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
 
-import { getRoomIpAddress, statusRoom } from "@/app/api/music/sonos/utils";
+import {
+  getRoomIpAddress,
+  Room,
+  statusRoom,
+} from "@/app/api/music/sonos/utils";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const ipAddress = getRoomIpAddress("Bedroom");
+    const { searchParams } = new URL(request.url);
+    const room = searchParams.get("room");
+
+    const ipAddress = getRoomIpAddress((room as Room) ?? "Bedroom");
 
     const state = await statusRoom(ipAddress);
 
