@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getRoomIpAddress, toggleRoom } from "./utils";
+import { getRoomIpAddress, toggleRoom } from "@/app/api/music/sonos/utils";
 
 /**
  * THIS IS THE API ROUTE FOR TOGGLING MUSIC ON A SPECIFIC ROOM

@@ -3,7 +3,7 @@
 import { Room } from "@/app/api/music/sonos/utils";
 import { useState, useEffect, Fragment } from "react";
 
-export default function PlayMusicButton({ room }: { room: Room }) {
+export default function PlayMusicButton() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -11,9 +11,10 @@ export default function PlayMusicButton({ room }: { room: Room }) {
   useEffect(() => {
     const fetchStatus = async () => {
       setIsLoading(true);
-      const response = await fetch("/api/music/sonos/getStatus");
+      const response = await fetch("/api/music/bluesound/getStatus");
       const data = await response.json();
-      setIsPlaying(data.data.state.state !== "paused");
+      console.log({ data });
+      setIsPlaying(data.data.isPlaying);
       setIsLoading(false);
     };
 
@@ -24,22 +25,11 @@ export default function PlayMusicButton({ room }: { room: Room }) {
     try {
       setError(null);
       setIsLoading(true);
-      const response = await fetch("/api/music/sonos/toggleRoom", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          room,
-          //   url: "https://traffic.libsyn.com/secure/thecsspodcast/TCP090_final.mp3?dest-id=1891556",
-        }),
-      });
+      const response = await fetch("/api/music/bluesound/toggleRoom");
 
       const data = await response.json();
 
-      const newStatePlaying = data.data.state !== "paused";
-
-      setIsPlaying(newStatePlaying);
+      setIsPlaying(data.data.isPlaying);
 
       if (!data.success) {
         throw new Error(data.error || "Failed to play music");
@@ -55,6 +45,7 @@ export default function PlayMusicButton({ room }: { room: Room }) {
     <Fragment>
       <button onClick={handlePlayMusic} disabled={isLoading}>
         {isPlaying ? "Pause" : "Play"}
+        {/* Toggle Music */}
       </button>
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
