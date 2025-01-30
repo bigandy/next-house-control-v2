@@ -1,23 +1,18 @@
 import { NextResponse } from "next/server";
 
-import { getMusicStatus, toggleMusic } from "@/app/api/music/bluesound/utils";
+import { getFavorites } from "@/app/api/music/bluesound/utils";
 
 /**
- * THIS IS THE API ROUTE FOR TOGGLING MUSIC IN BLUESOUND
- * @param request
+ * Gets the favorites from the bluesound device
  * @returns
  */
 export async function GET() {
   try {
-    await toggleMusic();
-
-    const { status: newStatus } = await getMusicStatus();
-
-    const isPlaying = newStatus === "stream";
+    const favorites = await getFavorites();
 
     return NextResponse.json({
       success: true,
-      data: { isPlaying },
+      data: { favorites },
     });
   } catch (error) {
     console.error("Error playing music:", error);

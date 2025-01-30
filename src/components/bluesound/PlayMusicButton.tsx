@@ -1,9 +1,8 @@
 "use client";
 
-import { Room } from "@/app/api/music/sonos/utils";
-import { useState, useEffect, Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-export default function PlayMusicButton() {
+export default function BlueSounsPlayMusicButton() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -12,9 +11,13 @@ export default function PlayMusicButton() {
     const fetchStatus = async () => {
       setIsLoading(true);
       const response = await fetch("/api/music/bluesound/getStatus");
-      const data = await response.json();
-      console.log({ data });
-      setIsPlaying(data.data.isPlaying);
+      const responseJson = await response.json();
+
+      const {
+        data: { isPlaying },
+      } = responseJson;
+
+      setIsPlaying(isPlaying);
       setIsLoading(false);
     };
 
@@ -45,7 +48,6 @@ export default function PlayMusicButton() {
     <Fragment>
       <button onClick={handlePlayMusic} disabled={isLoading}>
         {isPlaying ? "Pause" : "Play"}
-        {/* Toggle Music */}
       </button>
 
       {error && <p className="mt-4 text-red-500">{error}</p>}

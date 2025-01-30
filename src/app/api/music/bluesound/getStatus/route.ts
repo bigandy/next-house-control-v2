@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getMusicStatus } from "../utils";
 
 /**
- * THIS IS THE API ROUTE FOR TOGGLING MUSIC ON A SPECIFIC ROOM IN BLUESOUND
+ * THIS IS THE API ROUTE FOR GETTING THE STATUS OF MUSIC IN BLUESOUND
  * @param request
  * @returns
  */
@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: { isPlaying, volume: status.volume },
+      data: { isPlaying, volume: status.volume, title: status.title },
     });
   } catch (error) {
     console.error("Error playing music:", error);
