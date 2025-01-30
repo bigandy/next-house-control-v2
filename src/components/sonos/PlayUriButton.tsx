@@ -85,11 +85,16 @@ export default function PlayMusicButton({ room }: { room: Room }) {
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
-      {urlsToTest.map((url) => (
-        <button key={url.uri} onClick={() => playUri(url.uri)}>
-          {url.title}
-        </button>
-      ))}
+      <details>
+        <summary>Test URLs</summary>
+        <div className="flex flex-col gap-2">
+          {urlsToTest.map((url) => (
+            <button key={url.uri} onClick={() => playUri(url.uri)}>
+              {url.title}
+            </button>
+          ))}
+        </div>
+      </details>
     </Fragment>
   );
 }
