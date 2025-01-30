@@ -18,8 +18,6 @@ export async function GET() {
     // 1. get status of the room
     const { status } = await getMusicStatus();
 
-    console.log({ status });
-
     if (status === "stream") {
       await pauseMusic();
     } else {
@@ -27,8 +25,6 @@ export async function GET() {
     }
 
     const { status: newStatus } = await getMusicStatus();
-
-    console.log({ newStatus });
 
     const isPlaying = newStatus === "stream";
 

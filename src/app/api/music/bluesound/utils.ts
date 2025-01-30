@@ -15,7 +15,6 @@ export const pauseMusic = async () => {
 export const getMusicStatus = async () => {
   const { status } = await getStateFromFetch("Status");
 
-  //   console.log({ status });
   return { status: status.state, volume: status.volume };
 };
 

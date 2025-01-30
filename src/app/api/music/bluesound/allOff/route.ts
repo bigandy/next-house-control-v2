@@ -1,21 +1,18 @@
 import { NextResponse } from "next/server";
 
-import { getMusicStatus } from "../utils";
+import { pauseMusic } from "@/app/api/music/bluesound/utils";
 
 /**
- * THIS IS THE API ROUTE FOR TOGGLING MUSIC ON A SPECIFIC ROOM IN BLUESOUND
- * @param request
+ * Turn off all the sonos devices
  * @returns
  */
 export async function GET() {
   try {
-    // 1. get status of the room
-    const status = await getMusicStatus();
-    const isPlaying = status.status === "stream";
+    const data = await pauseMusic();
 
     return NextResponse.json({
       success: true,
-      data: { isPlaying, volume: status.volume },
+      data,
     });
   } catch (error) {
     console.error("Error playing music:", error);
