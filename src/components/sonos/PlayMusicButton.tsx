@@ -22,8 +22,6 @@ export default function PlayMusicButton({ room }: { room: Room }) {
       setIsLoading(false);
 
       setCurrentTrack(currentTrack);
-
-      console.log({ responseJson });
     };
 
     fetchStatus();

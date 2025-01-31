@@ -56,7 +56,7 @@ export const getFavorites = async () => {
 export const getMusicStatus = async () => {
   const { status } = await getStateFromFetch("Status");
 
-  console.log({ status });
+  // console.log({ status });
 
   return {
     status: status.state,

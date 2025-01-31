@@ -105,7 +105,7 @@ export const getFavorites = async (ipAddress: string) => {
       return favorites;
     })
     .catch((e) => {
-      console.log("Error occurred %j", e);
+      console.error("Error occurred %j", e);
     });
 
   // // This assumes you have the Spotify music service connected to
@@ -198,7 +198,7 @@ export const playFavorite = async (ipAddress, favorite) => {
         return device.currentTrack();
       })
       .catch((e) => {
-        console.log("Error occurred", e);
+        console.error("Error occurred", e);
       });
   } else if (favorite.type === "mp3") {
     currentTrack = await device
@@ -231,10 +231,10 @@ export const playFavorite = async (ipAddress, favorite) => {
         return device.currentTrack();
       })
       .catch((e) => {
-        console.log("Error occurred: ", e);
+        console.error("Error occurred: ", e);
       });
   } else {
-    console.log("you didn't choose an available option");
+    console.error("you didn't choose an available option");
   }
 
   return currentTrack;
