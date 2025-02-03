@@ -1,36 +1,45 @@
 "use client";
 
 import { Room } from "@/app/api/music/sonos/utils";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useCallback } from "react";
 
 export default function PlayMusicButton({ room }: { room: Room }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentTrack, setCurrentTrack] = useState<any>(null);
+  // const [currentTrack, setCurrentTrack] = useState<any>(null);
+
+  const getStatus = useCallback(async (room: Room) => {
+    const response = await fetch(`/api/music/sonos/getStatus?room=${room}`);
+    const responseJson = await response.json();
+    const {
+      data: {
+        state: { state: playingState },
+      },
+    } = responseJson;
+
+    setIsPlaying(playingState !== "paused");
+  }, []);
+
   useEffect(() => {
+    if (!room) {
+      return;
+    }
+
     const fetchStatus = async () => {
       setIsLoading(true);
-      const response = await fetch("/api/music/sonos/getStatus");
-      const responseJson = await response.json();
-      const {
-        data: {
-          state: { state: playingState, currentTrack },
-        },
-      } = responseJson;
-      setIsPlaying(playingState !== "paused");
+      await getStatus(room);
       setIsLoading(false);
-
-      setCurrentTrack(currentTrack);
     };
 
     fetchStatus();
-  }, [room]);
+  }, [room, getStatus]);
 
   const handlePlayMusic = async () => {
     try {
       setError(null);
       setIsLoading(true);
+
       const response = await fetch("/api/music/sonos/toggleRoom", {
         method: "POST",
         headers: {
@@ -38,15 +47,12 @@ export default function PlayMusicButton({ room }: { room: Room }) {
         },
         body: JSON.stringify({
           room,
-          //   url: "https://traffic.libsyn.com/secure/thecsspodcast/TCP090_final.mp3?dest-id=1891556",
         }),
       });
 
       const data = await response.json();
 
-      const newStatePlaying = data.data.state !== "paused";
-
-      setIsPlaying(newStatePlaying);
+      await getStatus(room);
 
       if (!data.success) {
         throw new Error(data.error || "Failed to play music");
@@ -66,13 +72,13 @@ export default function PlayMusicButton({ room }: { room: Room }) {
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
-      {currentTrack && (
+      {/* {currentTrack && (
         <div>
           <p>Title: {currentTrack.title}</p>
           <p>Artist: {currentTrack.artist}</p>
           <p>Uri: {currentTrack.uri}</p>
         </div>
-      )}
+      )} */}
     </Fragment>
   );
 }

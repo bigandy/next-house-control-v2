@@ -9,7 +9,7 @@ export const deviceDiscovery = async () => {
 
   const sonos = new Sonos(devices.host);
   const groups = await sonos.getAllGroups();
-
+  // @ts-expect-error TODO: fix this
   return groups.map((group) => ({ host: group.host, name: group.Name }));
 };
 
@@ -67,8 +67,11 @@ export const toggleRoom = async (ipAddress: string) => {
   try {
     const device = new Sonos(ipAddress);
     await device.togglePlayback();
-    const state = await device.getCurrentState();
-    return state;
+    // console.log("info", info);
+    // return info;
+    // const state = await device.getCurrentState();
+    // return state;
+    return "success";
   } catch (e) {
     console.error("error in toggleRoom", e);
   }
@@ -101,9 +104,7 @@ export const getFavorites = async (ipAddress: string) => {
 
   const sonosFavorites = await device
     .getFavorites()
-    .then((favorites) => {
-      return favorites;
-    })
+    // @ts-expect-error TODO: fix this
     .catch((e) => {
       console.error("Error occurred %j", e);
     });
@@ -141,11 +142,13 @@ export const getFavorites = async (ipAddress: string) => {
   // };
 
   // // get random property from an object.
+  // @ts-expect-error TODO: fix this
   const favoriteItems = sonosFavorites.items.filter((item) => item.uri);
 
   const formattedFavorites = {};
+  // @ts-expect-error TODO: fix this
   favoriteItems.forEach((item) => {
-    const returnObj: any = {
+    const returnObj = {
       title: item.title,
     };
 
@@ -153,10 +156,16 @@ export const getFavorites = async (ipAddress: string) => {
     const split = type.replace(/(^:)|(:$)/g, "").split(":");
 
     if (split[0] === "x-sonosapi-stream") {
+      // @ts-expect-error TODO: fix this
+
       returnObj.type = "tunein";
+      // @ts-expect-error TODO: fix this
+
       returnObj.id = split[1].split("?")[0];
     } else if (split[0] === "x-rincon-mp3radio") {
+      // @ts-expect-error TODO: fix this
       returnObj.type = "mp3";
+      // @ts-expect-error TODO: fix this
       returnObj.url = type;
     } else if (split[0] === "x-rincon-cpcontainer") {
       if (!split[1].includes("spotify")) {
@@ -168,22 +177,30 @@ export const getFavorites = async (ipAddress: string) => {
         .split(":");
 
       // either spotify-album or spotify-playlist
+      // @ts-expect-error TODO: fix this
+
       returnObj.id = `spotify:${beforeQuestion[1]}:${beforeQuestion[2]}`;
+      // @ts-expect-error TODO: fix this
+
       returnObj.type = "spotify";
     }
-
+    // @ts-expect-error TODO: fix this
     formattedFavorites[item.title] = returnObj;
   });
 
   return {
-    formattedFavorites: Object.values(formattedFavorites).filter((fav: any) => {
+    formattedFavorites: Object.values(formattedFavorites).filter((fav) => {
+      // @ts-expect-error TODO: fix this
       return !!fav.type && !!fav.url;
     }),
     sonosFavorites,
   };
 };
 
-export const playFavorite = async (ipAddress, favorite) => {
+export const playFavorite = async (
+  ipAddress: string,
+  favorite: { url: string; title: string; id: string; type: string }
+) => {
   const device = new Sonos(ipAddress);
 
   device.setSpotifyRegion(Regions.EU);
@@ -193,20 +210,20 @@ export const playFavorite = async (ipAddress, favorite) => {
   if (favorite.type === "tunein") {
     currentTrack = await device
       .playTuneinRadio(favorite.id, favorite.title)
-      .then((success) => {
-        // console.log("Yeay tunein playing", favorite.title);
+      .then(() => {
         return device.currentTrack();
       })
+      // @ts-expect-error TODO: fix this
       .catch((e) => {
         console.error("Error occurred", e);
       });
   } else if (favorite.type === "mp3") {
     currentTrack = await device
       .play(favorite.url)
-      .then((success) => {
-        // console.log("Yeay mp3 playing", favorite.title);
+      .then(() => {
         return device.currentTrack();
       })
+      // @ts-expect-error TODO: fix this
       .catch((e) => {
         console.log("Error occurred", e);
       });
@@ -215,10 +232,10 @@ export const playFavorite = async (ipAddress, favorite) => {
 
     currentTrack = await device
       .play(spotifyUri)
-      .then((success) => {
-        // console.log("Yeay, spotify album playing", favorite.title);
+      .then(() => {
         return device.currentTrack();
       })
+      // @ts-expect-error TODO: fix this
       .catch((e) => {
         console.log("Error occurred: ", e);
       });
@@ -226,10 +243,10 @@ export const playFavorite = async (ipAddress, favorite) => {
     const spotifyUri = `spotify:playlist:${favorite.id}`;
     currentTrack = await device
       .play(spotifyUri)
-      .then((success) => {
-        // console.log("Yeay, spotify Playlist playing", favorite.title);
+      .then(() => {
         return device.currentTrack();
       })
+      // @ts-expect-error TODO: fix this
       .catch((e) => {
         console.error("Error occurred: ", e);
       });
@@ -240,23 +257,26 @@ export const playFavorite = async (ipAddress, favorite) => {
   return currentTrack;
 };
 
-export const playFavoriteWithStatuses = async (favorite, roomToPlay = "") => {
-  const ipAddress = getRoomIpAddress(roomToPlay);
-  const device = new Sonos(ipAddress);
+// export const playFavoriteWithStatuses = async (
+//   favorite: Room,
+//   roomToPlay = ""
+// ) => {
+//   const ipAddress = getRoomIpAddress(roomToPlay);
+//   const device = new Sonos(ipAddress);
 
-  const statusBefore = await device.getCurrentState(roomToPlay);
+//   const statusBefore = await device.getCurrentState(roomToPlay);
 
-  const currentTrack = await playFavorite(favorite, roomToPlay);
+//   const currentTrack = await playFavorite(favorite, roomToPlay);
 
-  const status = await device.getCurrentState(roomToPlay);
+//   const status = await device.getCurrentState(roomToPlay);
 
-  return {
-    currentTrack,
-    favorite,
-    status,
-    statusBefore,
-  };
-};
+//   return {
+//     currentTrack,
+//     favorite,
+//     status,
+//     statusBefore,
+//   };
+// };
 
 const availableRooms = [
   { id: "Blanc", name: "Blanc", ipAddress: getRoomIpAddress("Blanc") },
@@ -276,7 +296,13 @@ export const handleAll = async (method = "pause") => {
     }, Promise.resolve());
   }
 
-  const statuses = [];
+  const statuses: {
+    state: string;
+    volume: number;
+    currentTrack: string;
+    muted: boolean;
+    room: string;
+  }[] = [];
   await availableRooms.reduce(async (previousPromise, nextID) => {
     await previousPromise;
     const { state, volume, currentTrack, muted } = await statusRoom(

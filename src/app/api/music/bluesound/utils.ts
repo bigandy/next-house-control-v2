@@ -1,5 +1,14 @@
 import { XMLParser } from "fast-xml-parser";
 
+type BluesoundResponse = {
+  status?: {
+    state: string;
+    volume: number;
+    title1: string;
+  };
+  state?: string;
+};
+
 export const playMusic = async () => {
   const { state } = await getStateFromFetch("Play");
 
@@ -59,13 +68,13 @@ export const getMusicStatus = async () => {
   // console.log({ status });
 
   return {
-    status: status.state,
-    volume: status.volume,
-    title: status.title1,
+    status: status?.state,
+    volume: status?.volume,
+    title: status?.title1,
   };
 };
 
-const getStateFromFetch = async (slug: string): Promise<any> => {
+const getStateFromFetch = async (slug: string): Promise<BluesoundResponse> => {
   const response = await fetch(`http://192.168.1.86:11000/${slug}`);
 
   const xmlString: string = (await response.text()).replaceAll("\n", "");
