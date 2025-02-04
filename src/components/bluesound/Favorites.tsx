@@ -1,6 +1,6 @@
 "use client";
 
-type Favorite = {
+type BluesoundFavorite = {
   url: string;
   name: string;
   image: string;
@@ -8,7 +8,7 @@ type Favorite = {
 };
 
 import { useState, useEffect, Fragment } from "react";
-
+import Favorite from "@/components/Favorite";
 export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [error, setError] = useState<string | null>(null);
@@ -54,13 +54,13 @@ export default function Favorites() {
     <Fragment>
       <div>
         {favorites.length > 0 ? (
-          favorites.map((favorite: Favorite) => (
-            <div key={favorite.id} className="flex items-center gap-2 mb-2">
-              {favorite.name}{" "}
-              <button onClick={() => handlePlayFavorite(favorite.id)}>
-                Play Favorite
-              </button>
-            </div>
+          favorites.map((favorite: BluesoundFavorite) => (
+            <Favorite
+              key={favorite.url}
+              title={favorite.name}
+              handlePlayFavorite={handlePlayFavorite}
+              favorite={favorite}
+            />
           ))
         ) : (
           <div>No favorites found</div>

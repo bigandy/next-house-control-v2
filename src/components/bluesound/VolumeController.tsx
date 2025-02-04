@@ -6,15 +6,20 @@ export default function VolumeController() {
   const [volume, setVolume] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
+  const getStatus = async () => {
+    const response = await fetch("/api/music/bluesound/getStatus");
+    const responseJson = await response.json();
+
+    const {
+      data: { volume },
+    } = responseJson;
+
+    setVolume(volume);
+  };
+
   useEffect(() => {
     const fetchStatus = async () => {
-      const response = await fetch("/api/music/bluesound/getStatus");
-      const responseJson = await response.json();
-
-      const {
-        data: { volume },
-      } = responseJson;
-      setVolume(volume);
+      await getStatus();
     };
 
     fetchStatus();

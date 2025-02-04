@@ -2,6 +2,7 @@
 
 import { Room } from "@/app/api/music/sonos/utils";
 import { useState, useEffect, Fragment } from "react";
+import Favorite from "@/components/Favorite";
 
 export default function Favorites({ room }: { room: Room }) {
   const [favorites, setFavorites] = useState([]);
@@ -57,12 +58,12 @@ export default function Favorites({ room }: { room: Room }) {
 
           {favorites?.length > 0 ? (
             favorites.map((favorite: { url: string; title: string }) => (
-              <div key={favorite.url} className="flex items-center gap-2 mb-2">
-                {favorite.title}{" "}
-                <button onClick={() => handlePlayFavorite(favorite)}>
-                  Play Favorite
-                </button>
-              </div>
+              <Favorite
+                key={favorite.url}
+                title={favorite.title}
+                handlePlayFavorite={handlePlayFavorite}
+                favorite={favorite}
+              />
             ))
           ) : (
             <div>No favorites found</div>

@@ -34,11 +34,15 @@ export default function PauseAllButton() {
 
   return (
     <Fragment>
-      <button onClick={handleAllOff} disabled={isLoading}>
+      <button
+        onClick={handleAllOff}
+        disabled={isLoading}
+        className="bg-red-500 hover:bg-red-700"
+      >
         Stop All
       </button>
 
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && <p className="mt-4 text-red-500 h">{error}</p>}
     </Fragment>
   );
 }

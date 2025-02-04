@@ -7,17 +7,21 @@ export default function BlueSounsPlayMusicButton() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const getStatus = async () => {
+    const response = await fetch("/api/music/bluesound/getStatus");
+    const responseJson = await response.json();
+
+    const {
+      data: { isPlaying },
+    } = responseJson;
+
+    setIsPlaying(isPlaying);
+  };
+
   useEffect(() => {
     const fetchStatus = async () => {
       setIsLoading(true);
-      const response = await fetch("/api/music/bluesound/getStatus");
-      const responseJson = await response.json();
-
-      const {
-        data: { isPlaying },
-      } = responseJson;
-
-      setIsPlaying(isPlaying);
+      await getStatus();
       setIsLoading(false);
     };
 
@@ -31,6 +35,8 @@ export default function BlueSounsPlayMusicButton() {
       const response = await fetch("/api/music/bluesound/toggleRoom");
 
       const data = await response.json();
+
+      // await getStatus();
 
       setIsPlaying(data.data.isPlaying);
 

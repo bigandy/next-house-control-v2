@@ -3,6 +3,8 @@
 import { Room } from "@/app/api/music/sonos/utils";
 import { useState, useEffect, Fragment, useCallback } from "react";
 
+const inactiveStates = ["paused", "stopped"];
+
 export default function PlayMusicButton({ room }: { room: Room }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +20,7 @@ export default function PlayMusicButton({ room }: { room: Room }) {
       },
     } = responseJson;
 
-    setIsPlaying(playingState !== "paused");
+    setIsPlaying(!inactiveStates.includes(playingState));
   }, []);
 
   useEffect(() => {
