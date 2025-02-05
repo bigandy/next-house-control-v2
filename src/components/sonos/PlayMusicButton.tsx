@@ -1,27 +1,21 @@
 "use client";
 
 import { Room } from "@/app/api/music/sonos/utils";
-import { useState, useEffect, Fragment, useCallback } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-const inactiveStates = ["paused", "stopped"];
-
-export default function PlayMusicButton({ room }: { room: Room }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function PlayMusicButton({
+  room,
+  getStatus,
+  isPlaying,
+  currentTrack,
+}: {
+  room: Room;
+  getStatus: (room: Room) => Promise<void>;
+  isPlaying: boolean;
+  currentTrack: any;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // const [currentTrack, setCurrentTrack] = useState<any>(null);
-
-  const getStatus = useCallback(async (room: Room) => {
-    const response = await fetch(`/api/music/sonos/getStatus?room=${room}`);
-    const responseJson = await response.json();
-    const {
-      data: {
-        state: { state: playingState },
-      },
-    } = responseJson;
-
-    setIsPlaying(!inactiveStates.includes(playingState));
-  }, []);
 
   useEffect(() => {
     if (!room) {
@@ -74,13 +68,13 @@ export default function PlayMusicButton({ room }: { room: Room }) {
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
 
-      {/* {currentTrack && (
+      {currentTrack && (
         <div>
           <p>Title: {currentTrack.title}</p>
           <p>Artist: {currentTrack.artist}</p>
           <p>Uri: {currentTrack.uri}</p>
         </div>
-      )} */}
+      )}
     </Fragment>
   );
 }

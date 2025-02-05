@@ -2,7 +2,7 @@
 
 type BluesoundFavorite = {
   url: string;
-  name: string;
+  title: string;
   image: string;
   id: string;
 };
@@ -57,7 +57,7 @@ export default function Favorites() {
           favorites.map((favorite: BluesoundFavorite) => (
             <Favorite
               key={favorite.url}
-              title={favorite.name}
+              title={favorite.title}
               handlePlayFavorite={handlePlayFavorite}
               favorite={favorite}
             />

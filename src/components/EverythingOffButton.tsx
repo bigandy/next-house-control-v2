@@ -1,6 +1,8 @@
 "use client";
 
 import { Fragment, useState } from "react";
+import CancelButton from "@/components/CancelButton";
+
 /**
  * Pause all the (sonos && bluesound) devices
  * @returns JSX.Element
@@ -31,9 +33,9 @@ export default function EverythingOffButton() {
 
   return (
     <Fragment>
-      <button onClick={handleAllOff} disabled={isLoading}>
+      <CancelButton onClick={handleAllOff} disabled={isLoading}>
         Stop All
-      </button>
+      </CancelButton>
 
       {error && <p className="mt-4 text-red-500">{error}</p>}
     </Fragment>

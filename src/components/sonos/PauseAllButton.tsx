@@ -1,11 +1,19 @@
 "use client";
 
 import { Fragment, useState } from "react";
+import CancelButton from "@/components/CancelButton";
+import { Room } from "@/app/api/music/sonos/utils";
 /**
  * Pause all the sonos devices
  * @returns JSX.Element
  */
-export default function PauseAllButton() {
+export default function PauseAllButton({
+  getStatus,
+  room,
+}: {
+  getStatus: (room: Room) => Promise<void>;
+  room: Room;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,6 +30,8 @@ export default function PauseAllButton() {
 
       const data = await response.json();
 
+      await getStatus(room);
+
       if (!data.success) {
         throw new Error(data.error || "Failed to play music");
       }
@@ -34,13 +44,9 @@ export default function PauseAllButton() {
 
   return (
     <Fragment>
-      <button
-        onClick={handleAllOff}
-        disabled={isLoading}
-        className="bg-red-500 hover:bg-red-700"
-      >
+      <CancelButton onClick={handleAllOff} disabled={isLoading}>
         Stop All
-      </button>
+      </CancelButton>
 
       {error && <p className="mt-4 text-red-500 h">{error}</p>}
     </Fragment>

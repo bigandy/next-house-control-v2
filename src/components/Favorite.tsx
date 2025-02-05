@@ -12,9 +12,9 @@ const Favorite = ({
   };
 
   return (
-    <div className="flex items-center gap-2 mb-2">
+    <div className="flex items-center gap-2 mb-4">
       {title}
-      <button onClick={handleClick} className="ml-auto flex-grow-1">
+      <button onClick={handleClick} className="ml-auto flex-grow-1 max-w-1/2">
         Play Favorite
       </button>
     </div>

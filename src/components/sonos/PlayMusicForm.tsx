@@ -22,7 +22,15 @@ const urlsToTest = [
   },
 ];
 
-export default function PlayMusicButton({ room }: { room: Room }) {
+export default function PlayMusicForm({
+  room,
+  getStatus,
+  currentTrack,
+}: {
+  room: Room;
+  getStatus: (room: Room) => Promise<void>;
+  currentTrack: any;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +50,8 @@ export default function PlayMusicButton({ room }: { room: Room }) {
       });
 
       const data = await response.json();
+
+      await getStatus(room);
 
       if (!data.success) {
         throw new Error(data.error || "Failed to play music");

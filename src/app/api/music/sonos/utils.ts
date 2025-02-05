@@ -225,7 +225,7 @@ export const playFavorite = async (
       })
       // @ts-expect-error TODO: fix this
       .catch((e) => {
-        console.log("Error occurred", e);
+        console.error("Error occurred", e);
       });
   } else if (favorite.type === "spotify") {
     const spotifyUri = `${favorite.id}`;
@@ -237,7 +237,7 @@ export const playFavorite = async (
       })
       // @ts-expect-error TODO: fix this
       .catch((e) => {
-        console.log("Error occurred: ", e);
+        console.error("Error occurred: ", e);
       });
   } else if (favorite.type === "spotify-playlist") {
     const spotifyUri = `spotify:playlist:${favorite.id}`;

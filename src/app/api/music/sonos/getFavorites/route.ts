@@ -13,8 +13,6 @@ export async function GET(request: Request) {
 
     const ipAddress = getRoomIpAddress((room as Room) ?? "Bedroom");
 
-    // const state = await statusRoom(ipAddress);
-
     const { formattedFavorites, sonosFavorites } = await getFavorites(
       ipAddress
     );

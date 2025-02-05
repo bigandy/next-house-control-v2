@@ -4,7 +4,15 @@ import { Room } from "@/app/api/music/sonos/utils";
 import { useState, useEffect, Fragment } from "react";
 import Favorite from "@/components/Favorite";
 
-export default function Favorites({ room }: { room: Room }) {
+export default function Favorites({
+  room,
+  currentTrack,
+  getStatus,
+}: {
+  room: Room;
+  currentTrack: any;
+  getStatus: (room: Room) => Promise<void>;
+}) {
   const [favorites, setFavorites] = useState([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,6 +24,8 @@ export default function Favorites({ room }: { room: Room }) {
       const {
         data: { formattedFavorites },
       } = responseJson;
+
+      console.log({ formattedFavorites });
 
       setFavorites(formattedFavorites);
     };
@@ -42,6 +52,8 @@ export default function Favorites({ room }: { room: Room }) {
 
       const data = await response.json();
 
+      await getStatus(room);
+
       if (!data.success) {
         throw new Error(data.error || "Failed to play favorite");
       }
@@ -57,14 +69,17 @@ export default function Favorites({ room }: { room: Room }) {
           <summary>Favorites</summary>
 
           {favorites?.length > 0 ? (
-            favorites.map((favorite: { url: string; title: string }) => (
-              <Favorite
-                key={favorite.url}
-                title={favorite.title}
-                handlePlayFavorite={handlePlayFavorite}
-                favorite={favorite}
-              />
-            ))
+            favorites.map((favorite: { url: string; title: string }) => {
+              // console.log({ favorite });
+              return (
+                <Favorite
+                  key={favorite.url}
+                  title={favorite.title}
+                  handlePlayFavorite={handlePlayFavorite}
+                  favorite={favorite}
+                />
+              );
+            })
           ) : (
             <div>No favorites found</div>
           )}

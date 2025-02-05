@@ -1,21 +1,18 @@
 "use client";
 
 import { Room } from "@/app/api/music/sonos/utils";
-import { useState, useEffect, Fragment } from "react";
+import { Fragment, useState } from "react";
 
-export default function VolumeController({ room }: { room: Room }) {
-  const [volume, setVolume] = useState<number>(0);
+export default function VolumeController({
+  room,
+  volume,
+  setVolume,
+}: {
+  room: Room;
+  volume: number;
+  setVolume: (volume: number) => void;
+}) {
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchStatus = async () => {
-      const response = await fetch(`/api/music/sonos/getStatus?room=${room}`);
-      const data = await response.json();
-      setVolume(data.data.state.volume);
-    };
-
-    fetchStatus();
-  }, [room]);
 
   const handleUpdateVolume = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {

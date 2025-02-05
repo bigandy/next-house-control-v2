@@ -53,7 +53,7 @@ export const getFavorites = async () => {
 
       return {
         url: urlMatch ? urlMatch[1] : "",
-        name: nameMatch ? nameMatch[1] : "",
+        title: nameMatch ? nameMatch[1] : "",
         image: imageMatch ? imageMatch[1] : "",
         id: idMatch ? idMatch[1] : "",
       };
