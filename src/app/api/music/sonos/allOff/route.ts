@@ -8,11 +8,10 @@ import { handleAll } from "@/app/api/music/sonos/utils";
  */
 export async function GET() {
   try {
-    const data = await handleAll();
+    await handleAll("pause");
 
     return NextResponse.json({
       success: true,
-      data,
     });
   } catch (error) {
     console.error("Error playing music:", error);

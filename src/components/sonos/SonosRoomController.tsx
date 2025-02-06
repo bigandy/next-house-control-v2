@@ -37,8 +37,6 @@ const SonosRoomController = () => {
       },
     } = responseJson;
 
-    console.log({ currentTrack });
-
     setIsPlaying(!inactiveStates.includes(playingState));
     setCurrentTrack(currentTrack);
     setVolume(volume);

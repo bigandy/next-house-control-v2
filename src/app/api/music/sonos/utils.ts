@@ -35,39 +35,42 @@ export const playRoom = async (ipAddress: string) => {
   const device = new Sonos(ipAddress);
 
   await device.play();
-  const state = await device.getCurrentState();
-  return state;
+  return;
+  // const state = await device.getCurrentState();
+  // return state;
 };
 
 export const playMusicInRoom = async (ipAddress: string, uri: string) => {
   const device = new Sonos(ipAddress);
 
   await device.play(uri);
-  const state = await device.getCurrentState();
-  return state;
+  return;
+  // const state = await device.getCurrentState();
+  // return state;
 };
 
 export const setRoomVolume = async (ipAddress: string, volume: number) => {
   const device = new Sonos(ipAddress);
 
   await device.setVolume(volume);
-  const state = await device.getVolume();
-  return state;
+  return;
+  // const state = await device.getVolume();
+  // return state;
 };
 
 export const pauseRoom = async (ipAddress: string) => {
   const device = new Sonos(ipAddress);
 
   await device.pause();
-  const state = await device.getCurrentState();
-  return state;
+  return;
+  // const state = await device.getCurrentState();
+  // return state;
 };
 
 export const toggleRoom = async (ipAddress: string) => {
   try {
     const device = new Sonos(ipAddress);
     await device.togglePlayback();
-    // console.log("info", info);
     // return info;
     // const state = await device.getCurrentState();
     // return state;
@@ -95,8 +98,9 @@ export const toggleMute = async (roomToPlay: Room) => {
   const muted = await device.getMuted();
 
   await device.setMuted(!muted);
-  const state = await device.getCurrentState();
-  return state;
+  return;
+  // const state = await device.getCurrentState();
+  // return state;
 };
 
 export const getFavorites = async (ipAddress: string) => {
@@ -210,9 +214,9 @@ export const playFavorite = async (
   if (favorite.type === "tunein") {
     currentTrack = await device
       .playTuneinRadio(favorite.id, favorite.title)
-      .then(() => {
-        return device.currentTrack();
-      })
+      // .then(() => {
+      //   return device.currentTrack();
+      // })
       // @ts-expect-error TODO: fix this
       .catch((e) => {
         console.error("Error occurred", e);
@@ -243,9 +247,9 @@ export const playFavorite = async (
     const spotifyUri = `spotify:playlist:${favorite.id}`;
     currentTrack = await device
       .play(spotifyUri)
-      .then(() => {
-        return device.currentTrack();
-      })
+      // .then(() => {
+      //   return device.currentTrack();
+      // })
       // @ts-expect-error TODO: fix this
       .catch((e) => {
         console.error("Error occurred: ", e);
@@ -283,6 +287,21 @@ const availableRooms = [
   { id: "Bedroom", name: "Bedroom", ipAddress: getRoomIpAddress("Bedroom") },
 ];
 
+type Status = {
+  state: string;
+  volume: number;
+  currentTrack: string;
+  muted: boolean;
+};
+
+export const getStatuses = async () => {
+  const statusPromises = availableRooms.map((room) =>
+    statusRoom(room.ipAddress)
+  );
+  const statuses: Array<Status> = await Promise.all(statusPromises);
+  return statuses;
+};
+
 export const handleAll = async (method = "pause") => {
   if (method === "pause" || method === "play") {
     await availableRooms.reduce(async (previousPromise, nextID) => {
@@ -296,21 +315,5 @@ export const handleAll = async (method = "pause") => {
     }, Promise.resolve());
   }
 
-  const statuses: {
-    state: string;
-    volume: number;
-    currentTrack: string;
-    muted: boolean;
-    room: string;
-  }[] = [];
-  await availableRooms.reduce(async (previousPromise, nextID) => {
-    await previousPromise;
-    const { state, volume, currentTrack, muted } = await statusRoom(
-      nextID.ipAddress
-    );
-    statuses.push({ state, volume, currentTrack, muted, room: nextID.id });
-    return state;
-  }, Promise.resolve());
-
-  return statuses;
+  return true;
 };

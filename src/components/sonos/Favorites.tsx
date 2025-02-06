@@ -25,8 +25,6 @@ export default function Favorites({
         data: { formattedFavorites },
       } = responseJson;
 
-      console.log({ formattedFavorites });
-
       setFavorites(formattedFavorites);
     };
 
@@ -70,7 +68,6 @@ export default function Favorites({
 
           {favorites?.length > 0 ? (
             favorites.map((favorite: { url: string; title: string }) => {
-              // console.log({ favorite });
               return (
                 <Favorite
                   key={favorite.url}
