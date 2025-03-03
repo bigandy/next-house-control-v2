@@ -1,6 +1,8 @@
 import { Room } from "@/app/api/music/sonos/utils";
 
-export default function VolumeController({
+import CustomSelect from "@/components/CustomSelect";
+
+export default function RoomSelector({
   selectedRoom,
   handleRoomChange,
   rooms,
@@ -14,16 +16,11 @@ export default function VolumeController({
   };
 
   return (
-    <select
-      value={selectedRoom}
-      onChange={handleChange}
-      className="border rounded p-2 border-gray-500 mt-2"
-    >
-      {rooms.map((room) => (
-        <option key={room.id} value={room.id}>
-          {room.name}
-        </option>
-      ))}
-    </select>
+    <CustomSelect
+      className="mt-2"
+      selected={selectedRoom}
+      handleChange={handleChange}
+      options={rooms}
+    />
   );
 }
